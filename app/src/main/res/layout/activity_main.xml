@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:background="@drawable/androidapp"
+    android:gravity="center"
+    >
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="CodeProgress"
+    android:padding="5dp"
+    android:textColor="@color/black"
+    android:gravity="center"
+    android:textSize="30sp"
+    android:textStyle="bold"
+    android:layout_margin="10dp"
+    android:background="@drawable/textback"
+    />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/laptop2"
+        android:elevation="4dp"
+        />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        app:cardCornerRadius="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+
+        <EditText
+            android:id="@+id/codeforces"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="20dp"
+            android:hint="Codeforces username" />
+        <EditText
+            android:id="@+id/codechef"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="20dp"
+            android:hint="Codechef username" />
+        <EditText
+            android:id="@+id/leetcode"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="20dp"
+            android:hint="Leetcode username" />
+
+
+
+        <Button
+            android:background="@drawable/roundstyle"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="Get Details"
+            android:layout_margin="20dp"
+            android:id="@+id/getDetails"
+            />
+
+
+
+    </LinearLayout></androidx.cardview.widget.CardView>
+
+
+
+</LinearLayout>
