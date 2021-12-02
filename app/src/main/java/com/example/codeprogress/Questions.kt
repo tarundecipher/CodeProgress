@@ -3,14 +3,17 @@ package com.example.codeprogress
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.codeprogress.Responses.Response_questions
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_questions.*
 import java.lang.Exception
 
@@ -18,20 +21,53 @@ class Questions : AppCompatActivity() {
     var codechef:String = ""
     var codeforces:String = ""
     var leetcode:String = ""
+    var codeforces_questions_url = "http://143.244.130.232:3000/api/codeforces/questions?cdf="
+    var codechef_questions_url = "http://143.244.130.232:3000/api/codechef/questions?cdchf="
+    var leetcode_questions_url = "http://143.244.130.232:3000/api/leetcode/questions?leet="
     private var mInterstitialAd: InterstitialAd? = null
+    var my_intent:Intent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions)
+        my_intent = Intent(this,Statistics::class.java)
         codechef = intent.getStringExtra("codechef").toString()
         codeforces = intent.getStringExtra("codeforces").toString()
         leetcode = intent.getStringExtra("leetcode").toString()
+        if(codechef==null){
+            codechef = ""
+        }
+        if(codeforces==null){
+            codeforces = ""
+        }
+        if(leetcode==null){
+            leetcode = ""
+        }
         MobileAds.initialize(this) {
             Log.d("fuck","ads initialized")
         }
         create_interstital_ad(this)
+        codeforces_questions_url+=codeforces
+        codechef_questions_url+=codechef
+        leetcode_questions_url+=leetcode
 
+        attach_listener()
         fetch_details()
     }
+
+    private fun attach_listener() {
+
+
+        get_statistics.setOnClickListener{
+            val leet = leetcode
+            val forces =  codeforces
+                my_intent!!.putExtra("codeforces", forces)
+                my_intent!!.putExtra("leetcode", leet)
+            Log.d("fuck",my_intent.toString())
+                startActivity(my_intent)
+            }
+    }
+
 
     fun create_interstital_ad(activity: Activity){
 
@@ -75,48 +111,83 @@ class Questions : AppCompatActivity() {
 
     fun fetch_details(){
 
-            detailsLayout.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-            val api = api(codeforces, codechef, leetcode, this, ::get_result)
-            api.fetch()
+           leetcode2.visibility = View.GONE
+           codechef2.visibility = View.GONE
+           codeforces2.visibility = View.GONE
+            var api:Any =0
+            if(codeforces.length!=0) {
+                try {
+                    api<Response_questions>(
+                        codeforces_questions_url, Response_questions(0),
+                        this, ::get_questions_result_codeforces
+                    ).fetch()
+                }
+                catch(err:Exception){
+                    codeforces2.visibility = View.VISIBLE
+                    cdf_progress.visibility = View.GONE
+                }
+            }
+        else{
+                codeforces2.visibility = View.VISIBLE
+                cdf_progress.visibility = View.GONE
+            }
+            if(leetcode.length!=0) {
+                try {
+                    api<Response_questions>(
+                        leetcode_questions_url, Response_questions(0),
+                        this, ::get_questions_result_leetcode
+                    ).fetch()
+                }
+                catch(err:Exception){
+                    leet_progress.visibility = View.GONE
+                    leetcode2.visibility = View.VISIBLE
+                }
+            }
+        else{
+                leet_progress.visibility = View.GONE
+                leetcode2.visibility = View.VISIBLE
+            }
+            if(codechef.length!=0) {
+                try {
+                    api<Response_questions>(
+                        codechef_questions_url, Response_questions(0),
+                        this, ::get_questions_result_codechef
+                    ).fetch()
+                }
+                catch(err:Exception){
+                    cdchf_progress.visibility = View.GONE
+                    codechef2.visibility = View.VISIBLE
+                }
+            }
+        else{
+                cdchf_progress.visibility = View.GONE
+                codechef2.visibility = View.VISIBLE
+            }
     }
 
-    fun get_result(response:Response_details){
-        if(response==null){
-            return;
-        }
-        try {
-            var q1 = 0
-            var q2 = 0
-            var q3 = 0
-            if (response.codeforces!!.length != 0) {
-                 q1 = response.codeforces!!.toInt()
-                codeforces2.text = response.codeforces
-            }
-            if (response.codechef!!.size > 0 && (response.codechef!![0].length != 0 ||
-                        response.codechef!![1].length != 0)
-            ) {
-                if (response.codechef!![0].length != 0) {
-                    q2 = response.codechef!![0].toInt()
-                }
-                if (response.codechef!![1].length != 0) {
-                    q2 += response.codechef!![1].toInt()
-                }
-                codechef2.text = (q2).toString()
-            }
-
-            if (response.leetcode!!.length != 0) {
-                q3 = response.leetcode!!.toInt()
-                leetcode2.text = response.leetcode
-            }
-
-            total.text = (q1 + q2 + q3).toString()
-            progressBar.visibility = View.GONE
-            detailsLayout.visibility = View.VISIBLE
-        }
-        catch(e:Exception){
-            progressBar.visibility = View.GONE
-            Toast.makeText(this,"Server Error",Toast.LENGTH_LONG).show()
-        }
+    private fun get_questions_result_codechef(responseQuestions: Response_questions) {
+        val problems = responseQuestions.problems
+        codechef2.text = problems.toString()
+        cdchf_progress.visibility = View.GONE
+        codechef2.visibility = View.VISIBLE
+        total.text = (total.text.toString().toInt()+problems).toString()
     }
+
+    private fun get_questions_result_leetcode(responseQuestions: Response_questions) {
+        val problems = responseQuestions.problems
+        leetcode2.text = problems.toString()
+        leet_progress.visibility = View.GONE
+        leetcode2.visibility = View.VISIBLE
+        total.text = (total.text.toString().toInt()+problems).toString()
+    }
+
+    private fun get_questions_result_codeforces(responseQuestions: Response_questions) {
+        val problems = responseQuestions.problems
+        codeforces2.text = problems.toString()
+        codeforces2.visibility = View.VISIBLE
+        cdf_progress.visibility = View.GONE
+        total.text = (total.text.toString().toInt()+problems).toString()
+    }
+
+
 }

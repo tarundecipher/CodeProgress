@@ -10,17 +10,15 @@ import com.android.volley.DefaultRetryPolicy
 import com.google.gson.GsonBuilder
 
 
-class api(val cdf:String,val cdchf:String,val leet:String,val context:Context,
-          val callback:(input:Response_details)->Unit){
+class api<T>(val url:String,val response_structure:T,val context:Context,
+          val callback:(input:T)->Unit){
     val RequestQueue = Volley.newRequestQueue(context)
 
     fun fetch(){
-        val url = "http://143.244.130.232:3000/?cdf=${cdf}&cdchf=${cdchf}&leet" +
-                "=${leet}"
         val request = StringRequest(Request.Method.GET,url, Response.Listener { response->
             val gsonBuilder = GsonBuilder()
             val gson  = gsonBuilder.create()
-            val details = gson.fromJson(response,Response_details::class.java)
+            val details = gson.fromJson(response,response_structure!!::class.java)
             Log.d("fuck",response.toString())
             callback(details)
 

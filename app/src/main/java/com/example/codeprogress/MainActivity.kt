@@ -12,18 +12,42 @@ import android.widget.Toast
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_questions.*
 import java.lang.Exception
+import android.content.DialogInterface
+
+import android.content.ActivityNotFoundException
+import com.google.android.material.theme.overlay.MaterialThemeOverlay
+
+
+import android.app.AlertDialog
+import android.net.Uri
+import android.view.ContextThemeWrapper
+
+import com.google.android.play.core.appupdate.AppUpdateInfo
+
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.tasks.Task
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
+
 
 class MainActivity : AppCompatActivity() {
      var sharedPref:SharedPreferences? = null
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var my_intent:Intent? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        update_app()
+        firebaseAnalytics = Firebase.analytics
         my_intent = Intent(this,Questions::class.java)
 
 
@@ -38,6 +62,32 @@ class MainActivity : AppCompatActivity() {
         }
         attach_listener()
     }
+
+    fun update_app() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+
+// Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+// Checks whether the platform allows the specified type of update,
+// and checks the update priority.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.updatePriority() >= 4 /* high priority */
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                appUpdateManager.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                    AppUpdateType.IMMEDIATE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    1234)
+            }
+        }
+    }
+
     private fun attach_listener() {
 
 //        intent = Intent(this,Questions::class.java)
@@ -46,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             val chef = codechef.text.toString().trim()
             val forces =  codeforces.text.toString().trim()
             val leet = leetcode.text.toString().trim()
-            if(chef.length>0 && forces.length>0 && leet.length>0) {
                 with(sharedPref!!.edit()){
                     putString("codechef",chef)
                     putString("codeforces",forces)
@@ -58,10 +107,7 @@ class MainActivity : AppCompatActivity() {
                 my_intent!!.putExtra("leetcode", leet)
                 startActivity(my_intent)
 
-            }
-            else{
-                Toast.makeText(this,"Fill all usernames",Toast.LENGTH_SHORT).show()
-            }
+
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.codeprogress
+package com.example.codeprogress.Responses
 
 class Response_details {
 

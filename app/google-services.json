@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1087856196328",
+    "project_id": "codeprogress-8d1c7",
+    "storage_bucket": "codeprogress-8d1c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087856196328:android:2a72bb389307c59b0ee75d",
+        "android_client_info": {
+          "package_name": "com.decipher.codeprogress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087856196328-766j59fv18o0jlp7enp8puue7fp0inl5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDatXC23zceXmwbP0OJqz6iFu9DtShdxvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087856196328-766j59fv18o0jlp7enp8puue7fp0inl5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
