@@ -18,9 +18,9 @@ import org.eazegraph.lib.models.PieModel
 
 class Statistics : AppCompatActivity() {
     var pieChart:PieChart? = null
-    var codeforces_statistics_url = "http://143.244.130.232:3000/api/codeforces/statistics?cdf="
-    var leetcode_statistics_url = "http://143.244.130.232:3000/api/leetcode/statistics?leet="
-    var codeforces_rating_url = "http://143.244.130.232:3000/api/codeforces/rating?cdf="
+    var codeforces_statistics_url = "http://codeprogress.co.in/api/codeforces/statistics?cdf="
+    var leetcode_statistics_url = "http://codeprogress.co.in/api/leetcode/statistics?leet="
+    var codeforces_rating_url = "http://codeprogress.co.in/api/codeforces/rating?cdf="
     var leetcode_statistics:Leetcode_statistics? = null
     var codeforces_statistics:Codeforces_statistics? = null
     val bar_color = -0xa9480f

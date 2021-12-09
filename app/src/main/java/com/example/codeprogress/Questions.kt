@@ -21,9 +21,9 @@ class Questions : AppCompatActivity() {
     var codechef:String = ""
     var codeforces:String = ""
     var leetcode:String = ""
-    var codeforces_questions_url = "http://143.244.130.232:3000/api/codeforces/questions?cdf="
-    var codechef_questions_url = "http://143.244.130.232:3000/api/codechef/questions?cdchf="
-    var leetcode_questions_url = "http://143.244.130.232:3000/api/leetcode/questions?leet="
+    var codeforces_questions_url = "http://codeprogress.co.in/api/codeforces/questions?cdf="
+    var codechef_questions_url = "http://codeprogress.co.in/api/codechef/questions?cdchf="
+    var leetcode_questions_url = "http://codeprogress.co.in/api/leetcode/questions?leet="
     private var mInterstitialAd: InterstitialAd? = null
     var my_intent:Intent? = null
 

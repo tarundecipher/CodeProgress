@@ -27,6 +27,8 @@ import com.google.android.material.theme.overlay.MaterialThemeOverlay
 import android.app.AlertDialog
 import android.net.Uri
 import android.view.ContextThemeWrapper
+import com.example.codeprogress.Responses.Response_Update
+import com.example.codeprogress.Responses.Response_questions
 
 import com.google.android.play.core.appupdate.AppUpdateInfo
 
@@ -41,15 +43,19 @@ class MainActivity : AppCompatActivity() {
      var sharedPref:SharedPreferences? = null
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
+    private var update_url = "http://codeprogress.co.in/api/update"
     private var my_intent:Intent? = null
+    private var verion_name:String? = null
+    private var version_code:Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        verion_name = BuildConfig.VERSION_NAME
+        version_code = BuildConfig.VERSION_CODE
         update_app()
         firebaseAnalytics = Firebase.analytics
         my_intent = Intent(this,Questions::class.java)
-
 
         sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         val chef = sharedPref!!.getString("codechef","")
@@ -64,33 +70,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun update_app() {
-        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        api<Response_Update>(
+            update_url, Response_Update(version_code!!,verion_name!!),
+            this, ::get_update
+        ).fetch()
 
-// Returns an intent object that you use to check for an update.
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+    }
 
-// Checks whether the platform allows the specified type of update,
-// and checks the update priority.
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                && appUpdateInfo.updatePriority() >= 4 /* high priority */
-                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                appUpdateManager.startUpdateFlowForResult(
-                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                    appUpdateInfo,
-                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
-                    AppUpdateType.IMMEDIATE,
-                    // The current activity making the update request.
-                    this,
-                    // Include a request code to later monitor this update request.
-                    1234)
-            }
+    private fun get_update(responseUpdate: Response_Update) {
+        if(responseUpdate.versionname!=verion_name || responseUpdate.versioncode!=version_code) {
+            val update_intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=com.decipher.codeprogress")
+            )
+            startActivity(update_intent)
         }
     }
 
     private fun attach_listener() {
 
-//        intent = Intent(this,Questions::class.java)
         getDetails.setOnClickListener{
 
             val chef = codechef.text.toString().trim()
