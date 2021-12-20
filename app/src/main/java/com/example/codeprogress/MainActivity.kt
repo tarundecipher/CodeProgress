@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var update_url = "http://codeprogress.co.in/api/update"
     private var my_intent:Intent? = null
+    private var friend_intent:Intent? = null
     private var verion_name:String? = null
     private var version_code:Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,17 +56,8 @@ class MainActivity : AppCompatActivity() {
         version_code = BuildConfig.VERSION_CODE
         update_app()
         firebaseAnalytics = Firebase.analytics
-        my_intent = Intent(this,Questions::class.java)
-
-        sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        val chef = sharedPref!!.getString("codechef","")
-        val forces = sharedPref!!.getString("codeforces","")
-        val leet = sharedPref!!.getString("leetcode","")
-        if(chef!!.length>0){
-            codechef.setText(chef)
-            codeforces.setText(forces)
-            leetcode.setText(leet)
-        }
+        my_intent = Intent(this,TrackProgress::class.java)
+        friend_intent = Intent(this,TrackFriend::class.java)
         attach_listener()
     }
 
@@ -90,22 +82,11 @@ class MainActivity : AppCompatActivity() {
     private fun attach_listener() {
 
         getDetails.setOnClickListener{
-
-            val chef = codechef.text.toString().trim()
-            val forces =  codeforces.text.toString().trim()
-            val leet = leetcode.text.toString().trim()
-                with(sharedPref!!.edit()){
-                    putString("codechef",chef)
-                    putString("codeforces",forces)
-                    putString("leetcode",leet)
-                    apply()
-                }
-                my_intent!!.putExtra("codechef", chef)
-                my_intent!!.putExtra("codeforces", forces)
-                my_intent!!.putExtra("leetcode", leet)
                 startActivity(my_intent)
+        }
 
-
+        getFriend.setOnClickListener {
+            startActivity(friend_intent)
         }
     }
 

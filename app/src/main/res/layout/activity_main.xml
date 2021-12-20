@@ -10,25 +10,26 @@
     android:gravity="center"
     >
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="CodeProgress"
-    android:padding="5dp"
-    android:textColor="@color/black"
-    android:gravity="center"
-    android:textSize="30sp"
-    android:textStyle="bold"
-    android:layout_margin="10dp"
+<!--<TextView-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="CodeProgress"-->
+<!--    android:padding="5dp"-->
+<!--    android:textColor="@color/black"-->
+<!--    android:gravity="center"-->
+<!--    android:textSize="30sp"-->
+<!--    android:textStyle="bold"-->
+<!--    android:layout_margin="10dp"-->
 
-    />
+<!--    />-->
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@drawable/laptop2"
-        android:elevation="4dp"
-        />
+<!--    <ImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:src="@drawable/laptop2"-->
+<!--        android:elevation="4dp"-->
+<!--        />-->
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,36 +45,21 @@
         android:gravity="center"
         >
 
-
-        <EditText
-            android:id="@+id/codeforces"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="20dp"
-            android:inputType="text"
-            android:hint="Codeforces username" />
-        <EditText
-            android:id="@+id/codechef"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="20dp"
-            android:inputType="text"
-            android:hint="Codechef username" />
-        <EditText
-            android:id="@+id/leetcode"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="20dp"
-            android:inputType="text"
-            android:hint="Leetcode username" />
-
+            <Button
+                android:background="@drawable/roundstyle"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Track Friend"
+                android:layout_margin="20dp"
+                android:id="@+id/getFriend"
+                />
 
 
         <Button
             android:background="@drawable/roundstyle"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:text="Get Details"
+            android:text="Track Progress"
             android:layout_margin="20dp"
             android:id="@+id/getDetails"
             />
